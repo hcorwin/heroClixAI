@@ -1,26 +1,50 @@
+#!/usr/bin/env python3
+
 from tkinter import *
+from tkinter import messagebox
+from Heros import *
 
 
 window = Tk()
 window.title("HeroClixAI")
 
+myCapHero = CaptainAmerica()
+myIronManHero = IronMan()
+myThorHero = Thor()
+enemyCapHero = CaptainAmerica()
+enemyIronManHero = IronMan()
+enemyThorHero = Thor()
+heroArray = [myCapHero, myIronManHero, myThorHero,
+             enemyCapHero, enemyIronManHero, enemyThorHero]
+
 def updateState():
-    ourCapLocation = capEntry.get()
-    ourIronManLocation = ironManEntry.get()
-    ourThorLocation = thorEntry.get()
-    enemyCapLocation = enemyCapEntry.get()
-    enemyIronManLocation = enemyIronManEntry.get()
-    enemyThorLocation = enemyThorEntry.get()
-    whosAttackingText = whosAttackingEntry.get()
-    whosBeingAttackedText = whosDefendingEntry.get()
-    whatWasRolled = int(whatWasRolledEntry.get())
+
+    myCapHero.location = capEntry.get()
+
+    myIronManHero.location = ironManEntry.get()
+
+    myThorHero.location = thorEntry.get()
+
+    enemyCapHero.location = enemyCapEntry.get()
+
+    enemyIronManHero.location = enemyIronManEntry.get()
+
+    enemyThorHero.location = enemyThorEntry.get()
+
+    if whosAttackingEntry.get():
+        whosAttackingText = whosAttackingEntry.get()
+    if whosDefendingEntry.get():
+        whosBeingAttackedText = whosDefendingEntry.get()
+    if whatWasRolledEntry.get():
+        whatWasRolled = int(whatWasRolledEntry.get())
 
 def forceValueToHero():
     whosValueToChange = valueToEntry.get()
     whatTheValueIs = int(valueEntry.get())
 
 def getStatsOnHero():
-    whosStats = statsEntry.get()
+    whosStats = int(statsEntry.get())
+    messagebox.showinfo(heroArray[whosStats], str(heroArray[whosStats].placeInDial))
 
 
 

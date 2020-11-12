@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 class CaptainAmerica:
 
     def __init__(self):
@@ -12,8 +15,11 @@ class CaptainAmerica:
         self.damageValue = [(3, "leadership"), (3, "leadership"), (3, "leadership"), (2, "close combat expert"),
                             (2, "close combat expert"), (2, "close combat expert"),
                             (0, "ko"), (0, "ko"), (0, "ko"), (0, "ko"), (0, "ko"), (0, "ko")]
+        self.location = "A1"
         self.inPlay = True
         self.placeInDial = 0
+    def __str__(self):
+        return "Captain America"
 
 
 class Thor:
@@ -33,8 +39,12 @@ class Thor:
         self.damageValue = [(4, "nothing"), (4, "nothing"), (3, "nothing"), (3, "nothing"), (3, "nothing"),
                             (3, "nothing"),
                             (3, "nothing"), (3, "nothing"), (3, "nothing"), (0, "ko"), (0, "ko"), (0, "ko")]
+        self.location = "B1"
         self.inPlay = True
         self.placeInDial = 0
+
+    def __str__(self):
+        return "Thor"
 
 
 class IronMan:
@@ -52,8 +62,12 @@ class IronMan:
         self.damageValue = [(4, "nothing"), (3, "nothing"), (3, "nothing"), (2, "Ranged Combat Expert"),
                             (2, "Ranged Combat Expert"), (2, "Ranged Combat Expert"),
                             (2, "Ranged Combat Expert"), (0, "ko"), (0, "ko"), (0, "ko"), (0, "ko"), (0, "ko")]
+        self.location = "C1"
         self.inPlay = True
         self.placeInDial = 0
+
+    def __str__(self):
+        return "Iron Man"
 
 
 def main():
