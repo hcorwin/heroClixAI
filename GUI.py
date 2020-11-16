@@ -4,7 +4,6 @@ from tkinter import *
 from tkinter import messagebox
 from Heros import *
 
-
 window = Tk()
 window.title("HeroClixAI")
 
@@ -17,8 +16,8 @@ enemyThorHero = Thor()
 heroArray = [myCapHero, myIronManHero, myThorHero,
              enemyCapHero, enemyIronManHero, enemyThorHero]
 
-def updateState():
 
+def updateState():
     myCapHero.location = capEntry.get()
 
     myIronManHero.location = ironManEntry.get()
@@ -38,17 +37,18 @@ def updateState():
     if whatWasRolledEntry.get():
         whatWasRolled = int(whatWasRolledEntry.get())
 
+
 def forceValueToHero():
     whosValueToChange = valueToEntry.get()
     whatTheValueIs = int(valueEntry.get())
+
 
 def getStatsOnHero():
     whosStats = int(statsEntry.get())
     messagebox.showinfo(heroArray[whosStats], str(heroArray[whosStats].placeInDial))
 
 
-
-#labels
+# labels
 ourCap = Label(window, text="My Cap")
 ourCap.grid(row=0, column=0)
 
@@ -91,7 +91,7 @@ valueToForce.grid(row=7, column=2)
 getStatsOn = Label(window, text="Get Stats On")
 getStatsOn.grid(row=9, column=0)
 
-#Entries
+# Entries
 capEntry = Entry(window)
 capEntry.grid(row=0, column=1)
 
@@ -122,13 +122,13 @@ whatWasRolledEntry.grid(row=5, column=1)
 valueToEntry = Entry(window)
 valueToEntry.grid(row=7, column=1)
 
-valueEntry = Entry(window,)
+valueEntry = Entry(window, )
 valueEntry.grid(row=7, column=3)
 
 statsEntry = Entry(window)
 statsEntry.grid(row=9, column=1)
 
-#Buttons
+# Buttons
 attackButton = Button(window, text="Update State", bg="gray", command=updateState)
 attackButton.grid(row=5, column=2)
 
@@ -137,10 +137,5 @@ forceButton.grid(row=8, column=2)
 
 getStatsButton = Button(window, text="Get Stats", bg="gray", command=getStatsOnHero)
 getStatsButton.grid(row=9, column=2)
-
-
-
-
-
 
 window.mainloop()
