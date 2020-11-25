@@ -18,11 +18,25 @@ heroArray = [myCapHero, myIronManHero, myThorHero,
 
 def getMove():
 
-    #check if cap is the closest
+
+    #get everyones distance to enemies
+    capToCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyCapHero.location))
+    capToIronDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyIronManHero.location))
+    capToThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyThorHero.location))
+    capSmallest = min(capToCapDistance, capToIronDistance, capToThorDistance)
+    ironToCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyCapHero.location))
+    ironToIronDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyIronManHero.location))
+    ironToThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyThorHero.location))
+    ironManSmallest = min(ironToCapDistance, ironToIronDistance, ironToThorDistance)
+    thorToCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyCapHero.location))
+    thorToIronDistance = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyIronManHero.location))
+    thorToThorDistane = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyThorHero.location))
+    thorSmallest = min(thorToCapDistance, thorToIronDistance, thorToThorDistane)
+    # we want caps distance to be smallest, if it isnt, we are moving cap to the closest enemy
+    allSmallest = min(capSmallest, ironManSmallest, thorSmallest)
     
-        #if not, move cap
-    #check if iron man or thor is close enough to attack
-        # if we are, attack, require dice value against defense, check
+    if allSmallest != capSmallest:
+        print("hi")
 
 
 def updateState():
@@ -47,6 +61,7 @@ def updateState():
 
 
 def bfs(graph, start, destination):
+
     beenTo = []
     queue = [[start]]
 
@@ -65,10 +80,8 @@ def bfs(graph, start, destination):
 
                 if closest == destination:
                     print("Path:", *np)
-                    return
+                    return np
             beenTo.append(n)
-    print("No path exists")
-    return
 
 
 def forceValueToHero():
@@ -171,6 +184,9 @@ forceButton.grid(row=8, column=2)
 getStatsButton = Button(window, text="Get Stats", bg="gray", command=getStatsOnHero)
 getStatsButton.grid(row=9, column=2)
 
+getMoveButton = Button(window, text="Get Move", bg="gray", command=getMove)
+getMoveButton.grid(row=10, column=2)
+
 whatTheFuckThisThingIsHuge = {'A1': ['B1', 'A2', 'B2'], 'B1': ['A1', 'C1', 'A2', 'B2', 'C2'],
                               'C1': ['B1', 'D1', 'B2', 'C2', 'D2'], 'D1': ['C1', 'E1', 'C2', 'D2', 'E2'],
                               'E1': ['D1', 'F1', 'D2', 'E2', 'F2'], 'F1': ['E1', 'G1', 'E2', 'F2', 'G2'],
@@ -186,8 +202,8 @@ whatTheFuckThisThingIsHuge = {'A1': ['B1', 'A2', 'B2'], 'B1': ['A1', 'C1', 'A2',
                               'E2': ['D1', 'E1', 'F1', 'F2', 'D3', 'D2'], 'F2': ['E1', 'F1', 'G1', 'E2'],
                               'G2': ['F1', 'G1', 'H1', 'H2', 'H3', 'G3', 'F3'],
                               'H2': ['G1', 'H1', 'H3', 'G3', 'G2'], 'I2': ['I1', 'J1', 'J2', 'J3', 'I3'],
-                              'J2': ['I1', 'J1', 'K1' 'K3', 'J3', 'I3', 'I2'],
-                              'K2': ['J1', 'K1', 'L1', 'L2'], 'L2': ['K1', 'L1', 'M1', 'M2', 'M3' 'K2'],
+                              'J2': ['I1', 'J1', 'K1', 'K3', 'J3', 'I3', 'I2'],
+                              'K2': ['J1', 'K1', 'L1', 'L2'], 'L2': ['K1', 'L1', 'M1', 'M2', 'M3', 'K2'],
                               'M2': ['L1', 'M1', 'N1', 'N2', 'N3', 'M3', 'L2'],
                               'N2': ['M1', 'N1', 'O1', 'O2', 'O3', 'N3', 'M3', 'M2'],
                               'O2': ['N1', 'O1', 'P1', 'P2', 'P3', 'O3', 'N3', 'N2'],
@@ -262,7 +278,7 @@ whatTheFuckThisThingIsHuge = {'A1': ['B1', 'A2', 'B2'], 'B1': ['A1', 'C1', 'A2',
                               'P8': ['O7', 'P7', 'O8'], 'A9': ['A8', 'B8', 'B9'], 'B9': ['A8', 'B8', 'C9', 'A9'],
                               'C9': ['B8', 'C8', 'D8', 'D9', 'B9'], 'D9': ['C8', 'D8', 'E8', 'E9', 'E10', 'C9'],
                               'E9': ['D8', 'E8', 'F8', 'F9', 'F10', 'E10', 'D10', 'D9'],
-                              'F9': ['E8', 'F8', 'G8', 'G9', 'G10' 'F10', 'E10', 'E9'],
+                              'F9': ['E8', 'F8', 'G8', 'G9', 'G10', 'F10', 'E10', 'E9'],
                               'G9': ['F8', 'G8', 'H8', 'H9', 'H10', 'G10', 'F10', 'F9'],
                               'H9': ['G8', 'H8', 'I8', 'I9', 'I10', 'H10', 'G10', 'G9'],
                               'I9': ['H8', 'I8', 'J8', 'J9', 'J10', 'I10', 'H10', 'H9'],
