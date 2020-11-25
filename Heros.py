@@ -15,6 +15,7 @@ class CaptainAmerica:
         self.damageValue = [(3, "leadership"), (3, "leadership"), (3, "leadership"), (2, "close combat expert"),
                             (2, "close combat expert"), (2, "close combat expert"),
                             (0, "ko"), (0, "ko"), (0, "ko"), (0, "ko"), (0, "ko"), (0, "ko")]
+        self.range = 5
         self.location = "A1"
         self.inPlay = True
         self.placeInDial = 0
@@ -39,6 +40,7 @@ class Thor:
         self.damageValue = [(4, "nothing"), (4, "nothing"), (3, "nothing"), (3, "nothing"), (3, "nothing"),
                             (3, "nothing"),
                             (3, "nothing"), (3, "nothing"), (3, "nothing"), (0, "ko"), (0, "ko"), (0, "ko")]
+        self.range = 6
         self.location = "B1"
         self.inPlay = True
         self.placeInDial = 0
@@ -62,6 +64,7 @@ class IronMan:
         self.damageValue = [(4, "nothing"), (3, "nothing"), (3, "nothing"), (2, "Ranged Combat Expert"),
                             (2, "Ranged Combat Expert"), (2, "Ranged Combat Expert"),
                             (2, "Ranged Combat Expert"), (0, "ko"), (0, "ko"), (0, "ko"), (0, "ko"), (0, "ko")]
+        self.range = 7
         self.location = "C1"
         self.inPlay = True
         self.placeInDial = 0
