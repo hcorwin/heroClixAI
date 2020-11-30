@@ -19,6 +19,7 @@ class CaptainAmerica:
         self.location = "A1"
         self.inPlay = True
         self.placeInDial = 0
+        self.actionToken = 0
     def __str__(self):
         return "Captain America"
 
@@ -44,6 +45,7 @@ class Thor:
         self.location = "B1"
         self.inPlay = True
         self.placeInDial = 0
+        self.actionToken = 0
 
     def __str__(self):
         return "Thor"
@@ -68,6 +70,7 @@ class IronMan:
         self.location = "C1"
         self.inPlay = True
         self.placeInDial = 0
+        self.actionToken = 0
 
     def __str__(self):
         return "Iron Man"

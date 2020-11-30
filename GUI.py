@@ -16,27 +16,110 @@ enemyThorHero = Thor()
 heroArray = [myCapHero, myIronManHero, myThorHero,
              enemyCapHero, enemyIronManHero, enemyThorHero]
 
+
 def getMove():
-
-
-    #get everyones distance to enemies
+    # get everyones distance to enemies
     capToCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyCapHero.location))
     capToIronDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyIronManHero.location))
     capToThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyThorHero.location))
     capSmallest = min(capToCapDistance, capToIronDistance, capToThorDistance)
+
     ironToCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyCapHero.location))
     ironToIronDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyIronManHero.location))
     ironToThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyThorHero.location))
     ironManSmallest = min(ironToCapDistance, ironToIronDistance, ironToThorDistance)
+
     thorToCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyCapHero.location))
     thorToIronDistance = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyIronManHero.location))
     thorToThorDistane = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyThorHero.location))
     thorSmallest = min(thorToCapDistance, thorToIronDistance, thorToThorDistane)
-    # we want caps distance to be smallest, if it isnt, we are moving cap to the closest enemy
+    # we want caps distance to be smallest, if it isnt, we are moving cap to the closest enemy, unless attacks are
+    # happening
     allSmallest = min(capSmallest, ironManSmallest, thorSmallest)
-    
-    if allSmallest != capSmallest:
-        print("hi")
+    characterPlaces = [myCapHero.location, myThorHero.location, myIronManHero.location, enemyCapHero.location,
+                       enemyIronManHero.location, enemyThorHero.location]
+
+    # attack with Thor first, hes a big boy
+    if thorSmallest <= myThorHero.range and myThorHero.inPlay and myThorHero.actionToken == 0:
+        # if thor can attack, attack whoever is close. Get name of closest target
+        if thorSmallest == thorToCapDistance:
+            print("Thor attack Cap")
+        if thorSmallest == thorToIronDistance:
+            print("Thor attack Iron man")
+        if thorSmallest == thorToThorDistane:
+            print("Thor attack Thor")
+    # if were here that means thor cannot attack, check if Iron Man can attack
+    if ironManSmallest <= myIronManHero.range and myIronManHero.inPlay and myThorHero.actionToken == 0:
+        # if iron man can attack, attack whoever is close. Get the name of closest target
+        if ironManSmallest == ironToCapDistance:
+            print("Iron Man attack Cap")
+        if ironManSmallest == ironToIronDistance:
+            print("Iron Man attack Iron Man")
+        if ironManSmallest == ironToThorDistance:
+            print("Iron Man attack Thor")
+    # if we are here, that means thor nor iron man can attack, if cap is all that is left, he needs to attack
+    if capSmallest <= myCapHero.range and myCapHero.inPlay and myCapHero.actionToken == 0:
+        if capSmallest == capToCapDistance:
+            print("Cap attack Cap")
+        if capSmallest == capToIronDistance:
+            print("Cap attack Iron Man")
+        if capSmallest == capToThorDistance:
+            print("Cap attack Thor")
+    # if we didnt attack, then we need to move, lets move towards thor so we can kill that guy, then iron man, then cap
+    # decide who are going after in the order Thor > Iron Man > Cap
+    goToLocation = ""
+    if not enemyThorHero.inPlay:
+        if not enemyIronManHero.inPlay:
+            goToLocation = enemyCapHero.location
+        goToLocation = enemyIronManHero.location
+    else:
+        goToLocation = enemyThorHero.location
+    if myThorHero.inPlay and myThorHero.actionToken == 0:
+        tempMap = whatTheFuckThisThingIsHuge
+        # remove all instances of the characters location from the map
+        for q, v in tempMap.items():
+            for i in characterPlaces:
+                if v == i:
+                    v.remove(i)
+        if thorToThorDistane > myThorHero.movement[myThorHero.placeInDial][0]:
+            newSpot = bfs(tempMap, myThorHero.location, goToLocation)[myThorHero.movement[myThorHero.placeInDial][0]]
+        else:
+            newSpot = bfs(tempMap, myThorHero.location, goToLocation)[myThorHero.movement[myThorHero.placeInDial][0]-5]
+        myThorHero.location = newSpot
+        print("Move Thor to ", newSpot)
+    if myIronManHero.inPlay and myThorHero.actionToken == 0:
+        tempMap = whatTheFuckThisThingIsHuge
+        characterPlaces = [myCapHero.location, myThorHero.location, myIronManHero.location, enemyCapHero.location,
+                           enemyIronManHero.location, enemyThorHero.location]
+        # remove all instances of the characters location from the map
+        for q, v in tempMap.items():
+            for i in characterPlaces:
+                if v == i:
+                    v.remove(i)
+        if ironToThorDistance > myIronManHero.movement[myIronManHero.placeInDial][0]:
+            newSpot2 = bfs(tempMap, myIronManHero.location, goToLocation)[myIronManHero.movement[myIronManHero.placeInDial][0]]
+        else:
+            newSpot2 = bfs(tempMap, myIronManHero.location, goToLocation)[
+                myIronManHero.movement[myIronManHero.placeInDial][0] - 5]
+        myIronManHero.location = newSpot2
+        print("Move Iron Man to ", newSpot2)
+    if myCapHero.inPlay and myCapHero.actionToken == 0:
+        tempMap = whatTheFuckThisThingIsHuge
+        characterPlaces = [myCapHero.location, myThorHero.location, myIronManHero.location, enemyCapHero.location,
+                           enemyIronManHero.location, enemyThorHero.location]
+        # remove all instances of the characters location from the map
+        for q, v in tempMap.items():
+            for i in characterPlaces:
+                if v == i:
+                    v.remove(i)
+        if capToThorDistance > myCapHero.movement[myCapHero.placeInDial][0]:
+            newSpot3 = bfs(tempMap, myCapHero.location, goToLocation)[
+                myCapHero.movement[myCapHero.placeInDial][0]]
+        else:
+            newSpot3 = bfs(tempMap, myCapHero.location, goToLocation)[
+                myCapHero.movement[myCapHero.placeInDial][0] - 5]
+        myIronManHero.location = newSpot3
+        print("Move Cap to ", newSpot3)
 
 
 def updateState():
@@ -61,7 +144,6 @@ def updateState():
 
 
 def bfs(graph, start, destination):
-
     beenTo = []
     queue = [[start]]
 
@@ -79,7 +161,6 @@ def bfs(graph, start, destination):
                 queue.append(np)
 
                 if closest == destination:
-                    print("Path:", *np)
                     return np
             beenTo.append(n)
 
