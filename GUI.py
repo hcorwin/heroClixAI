@@ -181,6 +181,10 @@ def getDistances():
     ourCapToOurThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, myThorHero.location))
     ourIronmanToOurThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, myThorHero.location))
 
+    enemyCapToEnemyIronmanDistance = len(bfs(whatTheFuckThisThingIsHuge, enemyCapHero.location, enemyIronManHero.location))
+    enemyCapToEnemyThorDistance = len(bfs(whatTheFuckThisThingIsHuge, enemyCapHero.location, enemyThorHero.location))
+    enemyIronmanToEnemyThorDistance = len(bfs(whatTheFuckThisThingIsHuge, enemyIronManHero.location, enemyThorHero.location))
+
 # Check if we can attack an enemy
 def canAttack(unit):
     # Check to see if any enemy is in LOS
@@ -565,7 +569,6 @@ def lineOfSight(startingLocation, range):
     print(attackEnemyArray)                
 
                 
-
 
 def updateState():
     myCapHero.location = capEntry.get()
