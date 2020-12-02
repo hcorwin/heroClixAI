@@ -16,56 +16,93 @@ enemyThorHero = Thor()
 heroArray = [myCapHero, myIronManHero, myThorHero,
              enemyCapHero, enemyIronManHero, enemyThorHero]
 
+ourCapToEnemyCapDistance = 0
+ourCapToEnemyIronmanDistance = 0
+ourCapToEnemyThorDistance = 0
 
+ourIronmanToEnemyCapDistance = 0
+ourIronmanToEnemyIronmanDistance = 0
+ourIronmanToEnemyThorDistance = 0
+
+ourThorToEnemyCapDistance = 0
+ourThorToEnemyIronmanDistance = 0
+ourThorToEnemyThorDistance = 0
+
+ourCapToOurIronmanDistance = 0
+ourCapToOurThorDistance = 0
+ourIronmanToOurThorDistance = 0
+
+enemyCapToEnemyIronmanDistance = 0
+enemyCapToEnemyThorDistance = 0
+enemyIronmanToEnemyThorDistance = 0
+
+capsClosestEnemyDistance = 0
+ironmansClosestEnemyDistance = 0
+thorsClosestEnemyDistance = 0
+            
+
+# Used to determine what moves we should make this turn
 def getMove():
-    # get everyones distance to enemies
-    capToCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyCapHero.location))
-    capToIronDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyIronManHero.location))
-    capToThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyThorHero.location))
-    capSmallest = min(capToCapDistance, capToIronDistance, capToThorDistance)
-
-    ironToCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyCapHero.location))
-    ironToIronDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyIronManHero.location))
-    ironToThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyThorHero.location))
-    ironManSmallest = min(ironToCapDistance, ironToIronDistance, ironToThorDistance)
-
-    thorToCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyCapHero.location))
-    thorToIronDistance = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyIronManHero.location))
-    thorToThorDistane = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyThorHero.location))
-    thorSmallest = min(thorToCapDistance, thorToIronDistance, thorToThorDistane)
-    # we want caps distance to be smallest, if it isnt, we are moving cap to the closest enemy, unless attacks are
+    
+    # we want caps distance to be smallest, if it isn't, we are moving cap to the closest enemy, unless attacks are
     # happening
-    allSmallest = min(capSmallest, ironManSmallest, thorSmallest)
+    allSmallest = min(capsClosestEnemyDistance, ironmansClosestEnemyDistance, thorsClosestEnemyDistance)
     characterPlaces = [myCapHero.location, myThorHero.location, myIronManHero.location, enemyCapHero.location,
                        enemyIronManHero.location, enemyThorHero.location]
 
     # attack with Thor first, hes a big boy
-    if thorSmallest <= myThorHero.range and myThorHero.inPlay and myThorHero.actionToken == 0:
-        # if thor can attack, attack whoever is close. Get name of closest target
-        if thorSmallest == thorToCapDistance:
-            print("Thor attack Cap")
-        if thorSmallest == thorToIronDistance:
-            print("Thor attack Iron man")
-        if thorSmallest == thorToThorDistane:
-            print("Thor attack Thor")
+
+    # Check if Thor has Sidestep
+    if 6 <= myThorHero.placeInDial <= 8:
+
+        # If Thor has 2 action tokens, move with Sidestep into Enemy Thor's range
+        if myThorHero.actionToken == 2:
+            return 0
+
+        # if thorSmallest <= myThorHero.range and myThorHero.inPlay and myThorHero.actionToken == 0:
+        #     # if thor can attack, attack whoever is close. Get name of closest target
+        #     if thorSmallest == thorToCapDistance:
+        #         print("Thor attack Cap")
+        #     if thorSmallest == thorToIronDistance:
+        #         print("Thor attack Iron man")
+        #     if thorSmallest == thorToThorDistance:
+        #         print("Thor attack Thor")
+
     # if were here that means thor cannot attack, check if Iron Man can attack
-    if ironManSmallest <= myIronManHero.range and myIronManHero.inPlay and myThorHero.actionToken == 0:
-        # if iron man can attack, attack whoever is close. Get the name of closest target
-        if ironManSmallest == ironToCapDistance:
-            print("Iron Man attack Cap")
-        if ironManSmallest == ironToIronDistance:
-            print("Iron Man attack Iron Man")
-        if ironManSmallest == ironToThorDistance:
-            print("Iron Man attack Thor")
+
+    # Check if Ironman has Sidestep
+    if 3 <= myIronManHero.placeInDial <= 6:
+
+        # If Iron man has 2 action tokens, move with Sidestep into a safe attacking range of Thor or Cap
+        if myIronManHero.actionToken == 2:
+            return 0
+
+        # if ironManSmallest <= myIronManHero.range and myIronManHero.inPlay and myThorHero.actionToken == 0:
+        #     # if iron man can attack, attack whoever is close. Get the name of closest target
+        #     if ironManSmallest == ironToCapDistance:
+        #         print("Iron Man attack Cap")
+        #     if ironManSmallest == ironToIronDistance:
+        #         print("Iron Man attack Iron Man")
+        #     if ironManSmallest == ironToThorDistance:
+        #         print("Iron Man attack Thor")
+
     # if we are here, that means thor nor iron man can attack, if cap is all that is left, he needs to attack
-    if capSmallest <= myCapHero.range and myCapHero.inPlay and myCapHero.actionToken == 0:
-        if capSmallest == capToCapDistance:
-            print("Cap attack Cap")
-        if capSmallest == capToIronDistance:
-            print("Cap attack Iron Man")
-        if capSmallest == capToThorDistance:
-            print("Cap attack Thor")
-    # if we didnt attack, then we need to move, lets move towards thor so we can kill that guy, then iron man, then cap
+
+    # Check if Captain America has Sidestep
+    if 4 <= myCapHero.placeInDial <= 6:
+
+        # If Iron man has 2 action tokens then he can only move with Sidestep, Move closer to enemy
+        if myCapHero.actionToken == 2:
+            return 0
+
+        # if capSmallest <= myCapHero.range and myCapHero.inPlay and myCapHero.actionToken == 0:
+        #     if capSmallest == capToCapDistance:
+        #         print("Cap attack Cap")
+        #     if capSmallest == capToIronDistance:
+        #         print("Cap attack Iron Man")
+        #     if capSmallest == capToThorDistance:
+        #         print("Cap attack Thor")
+    # if we didn't attack, then we need to move, lets move towards thor so we can kill that guy, then iron man, then cap
     # decide who are going after in the order Thor > Iron Man > Cap
     goToLocation = ""
     if not enemyThorHero.inPlay:
@@ -81,10 +118,11 @@ def getMove():
             for i in characterPlaces:
                 if v == i:
                     v.remove(i)
-        if thorToThorDistane > myThorHero.movement[myThorHero.placeInDial][0]:
+        if thorToThorDistance > myThorHero.movement[myThorHero.placeInDial][0]:
             newSpot = bfs(tempMap, myThorHero.location, goToLocation)[myThorHero.movement[myThorHero.placeInDial][0]]
         else:
-            newSpot = bfs(tempMap, myThorHero.location, goToLocation)[myThorHero.movement[myThorHero.placeInDial][0]-5]
+            newSpot = bfs(tempMap, myThorHero.location, goToLocation)[
+                myThorHero.movement[myThorHero.placeInDial][0] - 5]
         myThorHero.location = newSpot
         print("Move Thor to ", newSpot)
     if myIronManHero.inPlay and myThorHero.actionToken == 0:
@@ -97,7 +135,8 @@ def getMove():
                 if v == i:
                     v.remove(i)
         if ironToThorDistance > myIronManHero.movement[myIronManHero.placeInDial][0]:
-            newSpot2 = bfs(tempMap, myIronManHero.location, goToLocation)[myIronManHero.movement[myIronManHero.placeInDial][0]]
+            newSpot2 = bfs(tempMap, myIronManHero.location, goToLocation)[
+                myIronManHero.movement[myIronManHero.placeInDial][0]]
         else:
             newSpot2 = bfs(tempMap, myIronManHero.location, goToLocation)[
                 myIronManHero.movement[myIronManHero.placeInDial][0] - 5]
@@ -118,8 +157,414 @@ def getMove():
         else:
             newSpot3 = bfs(tempMap, myCapHero.location, goToLocation)[
                 myCapHero.movement[myCapHero.placeInDial][0] - 5]
-        myIronManHero.location = newSpot3
+        myCapHero.location = newSpot3
         print("Move Cap to ", newSpot3)
+
+# Find the distances between all units on the board
+def getDistances():
+    ourCapToEnemyCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyCapHero.location))
+    ourCapToEnemyIronmanDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyIronManHero.location))
+    ourCapToEnemyThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, enemyThorHero.location))
+    capsClosestEnemyDistance = min(ourCapToEnemyCapDistance, ourCapToEnemyIronmanDistance, ourCapToEnemyThorDistance)
+
+    ourIronmanToEnemyCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyCapHero.location))
+    ourIronmanToEnemyIronmanDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyIronManHero.location))
+    ourIronmanToEnemyThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, enemyThorHero.location))
+    ironmansClosestEnemyDistance = min(ourIronmanToEnemyCapDistance, ourIronmanToEnemyIronmanDistance, ourIronmanToEnemyThorDistance)
+
+    ourThorToEnemyCapDistance = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyCapHero.location))
+    ourThorToEnemyIronmanDistance = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyIronManHero.location))
+    ourThorToEnemyThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myThorHero.location, enemyThorHero.location))
+    thorsClosestEnemyDistance = min(ourThorToEnemyCapDistance, ourThorToEnemyIronmanDistance, ourThorToEnemyThorDistance)
+
+    ourCapToOurIronmanDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, myIronManHero.location))
+    ourCapToOurThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myCapHero.location, myThorHero.location))
+    ourIronmanToOurThorDistance = len(bfs(whatTheFuckThisThingIsHuge, myIronManHero.location, myThorHero.location))
+
+# Check if we can attack an enemy
+def canAttack(unit):
+    # Check to see if any enemy is in LOS
+    thor = lineOfSight(unit.location, unit.range)[0]
+    tony = lineOfSight(unit.location, unit.range)[1]
+    cap = lineOfSight(unit.location, unit.range)[2]
+
+    # We want to prioritize thor, then Iron Man, then Cap
+    if(thor):
+        print(unit.__str__+ " Attacks Thor")
+    elif(tony):
+        print(unit.__str__+ " Attacks Iron Man")
+    elif(cap):
+        print(unit.__str__+ " Attacks Captain America")
+    else:
+        return False
+# Check if the charge ability is useful
+def canCharge(unit):
+    
+
+# Check if the sidestep ability is useful
+def canSidestep(unit):
+
+
+# Check if the running shot ability is useful
+def canRunningShot(unit):
+
+# Check if we can have Cap closeCombat
+def canCloseCombat():
+    # Check if 
+    if()
+# Check if Tony RangedCombat
+def canRangedCombat():
+    
+
+# Check if thor can LS
+def canLightningSmash():
+    count = 0
+    if(getDistances.)
+    if(count>=2):
+        return True
+    else:
+        return False
+
+
+# Check is we have a line of sight on the enemy based on our location and range
+def lineOfSight(startingLocation, range):
+
+    # Array that we will return in the end
+    attackEnemyArray = [False, False, False] 
+    # Will keep track of how much of the provided range we actually use
+    rangeUsed = 1
+
+    # The Letter associated with our starting location
+    startingLetter = startingLocation[0]
+
+    # The Number associated with out starting location
+    startingNumber = startingLocation[1:]
+
+    # Find the index of the Starting Letter so we can iterate through the alphabet
+    for index in alphabet:
+        if startingLetter == index:
+            startingLetter = alphabet.index(index)
+
+    # The Letter associated with the next location
+    nextLetter = str(startingLetter)
+
+    # The Number associated with the next location
+    nextNumber = startingLocation[1:]
+
+    # The next location we will be checking for an enemy at
+    nextLocation = startingLocation
+
+    # Used to hold the key's value that we are looking at
+    tempKey = 0
+
+    # Iterate through the dictionary and find our starting location
+    for key in whatTheFuckThisThingIsHuge:
+        
+        if key == startingLocation:
+
+            # Copy key's value into tempKey so key is not modified
+            tempKey = key
+
+            # Check directly above our starting location for an enemy by decrementing the number
+            while rangeUsed <= range:
+
+                # Decrement the next checked location's number to create it and then search for enemies
+                nextNumber = int(nextNumber)
+                nextNumber -= 1
+                nextNumber = str(nextNumber)
+                nextLocation = alphabet[int(nextLetter)] + nextNumber
+
+                # We have created the next location so now check all items associated with the key to see if it exists
+                for item in whatTheFuckThisThingIsHuge[tempKey]:
+                    if (item == nextLocation):
+                        tempKey = nextLocation
+                        if (enemyThorHero.location == nextLocation):
+                            attackEnemyArray[0] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                            
+                        if (enemyIronMan.location == nextLocation):
+                            attackEnemyArray[1] = [True, nextLocation]
+                            rangeUsed = range
+                            break    
+
+                        if (enemyCapHero.location == nextLocation):
+                            attackEnemyArray[2] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+
+                rangeUsed += 1
+
+            # Reset the variables before checking next sight line
+            nextLetter = str(startingLetter)
+            nextNumber = startingLocation[1:]
+            nextLocation = startingLocation
+            tempKey = key               
+            rangeUsed = 1
+
+            # Check directly below our starting location for an enemy by incrementing the number
+            while rangeUsed <= range:
+
+                # Increment the next checked location's number to create it and then search for enemies
+                nextNumber = int(nextNumber)
+                nextNumber += 1
+                nextNumber = str(nextNumber)
+                nextLocation = alphabet[int(nextLetter)] + nextNumber
+
+                # We have created the next location so now check all items associated with the key to see if it exists
+                for item in whatTheFuckThisThingIsHuge[tempKey]:
+                    if (item == nextLocation):
+                        tempKey = nextLocation
+                        if (enemyThorHero.location == nextLocation):
+                            attackEnemyArray[0] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                            
+                        if (enemyIronMan.location == nextLocation):
+                            attackEnemyArray[1] = [True, nextLocation]
+                            rangeUsed = range
+                            break    
+
+                        if (enemyCapHero.location == nextLocation):
+                            attackEnemyArray[2] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+
+                rangeUsed += 1
+
+            # Reset the variables before checking next sight line
+            nextLetter = str(startingLetter)
+            nextNumber = startingLocation[1:]
+            nextLocation = startingLocation
+            tempKey = key               
+            rangeUsed = 1
+
+            # Check directly to the left our starting location for an enemy by decrementing the letter
+            while rangeUsed <= range:
+                
+                 # Decrement the next checked location's letter to create it and then search for enemies
+                nextLetter = int(nextLetter)
+                nextLetter -= 1
+                nextLetter = str(nextLetter)
+                nextNumber = str(nextNumber)
+                nextLocation = alphabet[int(nextLetter)] + nextNumber
+
+                # We have created the next location so now check all items associated with the key to see if it exists
+                for item in whatTheFuckThisThingIsHuge[tempKey]:
+                    if (item == nextLocation):
+                        tempKey = nextLocation
+                        if (enemyThorHero.location == nextLocation):
+                            attackEnemyArray[0] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                            
+                        if (enemyIronMan.location == nextLocation):
+                            attackEnemyArray[1] = [True, nextLocation]
+                            rangeUsed = range
+                            break    
+
+                        if (enemyCapHero.location == nextLocation):
+                            attackEnemyArray[2] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                rangeUsed += 1
+            # Reset the variables before checking next sight line
+            nextLetter = str(startingLetter)
+            nextNumber = startingLocation[1:]
+            nextLocation = startingLocation
+            tempKey = key               
+            rangeUsed = 1
+
+            # Check directly to the right our starting location for an enemy by incrementing the letter
+            while rangeUsed <= range:
+
+                 # Increment the next checked location's letter to create it and then search for enemies
+                nextLetter = int(nextLetter)
+                nextLetter += 1
+                nextLetter = str(nextLetter)
+                nextNumber = str(nextNumber)
+                nextLocation = alphabet[int(nextLetter)] + nextNumber
+
+                # We have created the next location so now check all items associated with the key to see if it exists
+                for item in whatTheFuckThisThingIsHuge[tempKey]:
+                    if (item == nextLocation):
+                        tempKey = nextLocation
+                        if (enemyThorHero.location == nextLocation):
+                            attackEnemyArray[0] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                            
+                        if (enemyIronMan.location == nextLocation):
+                            attackEnemyArray[1] = [True, nextLocation]
+                            rangeUsed = range
+                            break    
+
+                        if (enemyCapHero.location == nextLocation):
+                            attackEnemyArray[2] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                rangeUsed += 1
+
+            # Reset the variables before checking next sight line
+            nextLetter = str(startingLetter)
+            nextNumber = startingLocation[1:]
+            nextLocation = startingLocation
+            tempKey = key               
+            rangeUsed = 1
+
+            # Check directly to the top left diagonal of our starting location for an enemy
+            while rangeUsed <= range:
+
+                 # Decrement the next checked location's number and letter to create it and then search for enemies
+                nextLetter = int(nextLetter)
+                nextNumber = int(nextNumber)
+                nextLetter -= 1
+                nextNumber -= 1
+                nextLetter = str(nextLetter)
+                nextNumber = str(nextNumber)
+                nextLocation = alphabet[int(nextLetter)] + nextNumber
+
+                # We have created the next location so now check all items associated with the key to see if it exists
+                for item in whatTheFuckThisThingIsHuge[tempKey]:
+                    if (item == nextLocation):
+                        tempKey = nextLocation
+                        if (enemyThorHero.location == nextLocation):
+                            attackEnemyArray[0] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                            
+                        if (enemyIronMan.location == nextLocation):
+                            attackEnemyArray[1] = [True, nextLocation]
+                            rangeUsed = range
+                            break    
+
+                        if (enemyCapHero.location == nextLocation):
+                            attackEnemyArray[2] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                rangeUsed += 1
+
+            # Reset the variables before checking next sight line
+            nextLetter = str(startingLetter)
+            nextNumber = startingLocation[1:]
+            nextLocation = startingLocation
+            tempKey = key               
+            rangeUsed = 1
+
+            # Check directly to the top right diagonal of our starting location for an enemy
+            while rangeUsed <= range:
+
+                 # Increment the next checked location's letter and decrement the number to create it and then search for enemies
+                nextLetter = int(nextLetter)
+                nextNumber = int(nextNumber)
+                nextLetter += 1
+                nextNumber -= 1
+                nextLetter = str(nextLetter)
+                nextNumber = str(nextNumber)
+                nextLocation = alphabet[int(nextLetter)] + nextNumber
+
+                # We have created the next location so now check all items associated with the key to see if it exists
+                for item in whatTheFuckThisThingIsHuge[tempKey]:
+                    if (item == nextLocation):
+                        tempKey = nextLocation
+                        if (enemyThorHero.location == nextLocation):
+                            attackEnemyArray[0] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                            
+                        if (enemyIronMan.location == nextLocation):
+                            attackEnemyArray[1] = [True, nextLocation]
+                            rangeUsed = range
+                            break    
+
+                        if (enemyCapHero.location == nextLocation):
+                            attackEnemyArray[2] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                rangeUsed += 1
+
+            # Reset the variables before checking next sight line
+            nextLetter = str(startingLetter)
+            nextNumber = startingLocation[1:]
+            nextLocation = startingLocation
+            tempKey = key               
+            rangeUsed = 1
+
+            # Check directly to the bottom left diagonal of our starting location for an enemy
+            while rangeUsed <= range:
+
+                 # Increment the next checked location's number and decrement the letter to create it and then search for enemies
+                nextLetter = int(nextLetter)
+                nextNumber = int(nextNumber)
+                nextLetter -= 1
+                nextNumber += 1
+                nextLetter = str(nextLetter)
+                nextNumber = str(nextNumber)
+                nextLocation = alphabet[int(nextLetter)] + nextNumber
+
+                # We have created the next location so now check all items associated with the key to see if it exists
+                for item in whatTheFuckThisThingIsHuge[tempKey]:
+                    if (item == nextLocation):
+                        tempKey = nextLocation
+                        if (enemyThorHero.location == nextLocation):
+                            attackEnemyArray[0] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                            
+                        if (enemyIronMan.location == nextLocation):
+                            attackEnemyArray[1] = [True, nextLocation]
+                            rangeUsed = range
+                            break    
+
+                        if (enemyCapHero.location == nextLocation):
+                            attackEnemyArray[2] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                rangeUsed += 1
+
+            # Reset the variables before checking next sight line
+            nextLetter = str(startingLetter)
+            nextNumber = startingLocation[1:]
+            nextLocation = startingLocation
+            tempKey = key               
+            rangeUsed = 1
+
+            # Check directly to the bottom right diagonal of our starting location for an enemy
+            while rangeUsed <= range:
+
+                 # Increment the next checked location's number and letter to create it and then search for enemies
+                nextLetter = int(nextLetter)
+                nextNumber = int(nextNumber)
+                nextLetter += 1
+                nextNumber += 1
+                nextLetter = str(nextLetter)
+                nextNumber = str(nextNumber)
+                nextLocation = alphabet[int(nextLetter)] + nextNumber
+
+                # We have created the next location so now check all items associated with the key to see if it exists
+                for item in whatTheFuckThisThingIsHuge[tempKey]:
+                    if (item == nextLocation):
+                        tempKey = nextLocation
+                        if (enemyThorHero.location == nextLocation):
+                            attackEnemyArray[0] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                            
+                        if (enemyIronMan.location == nextLocation):
+                            attackEnemyArray[1] = [True, nextLocation]
+                            rangeUsed = range
+                            break    
+
+                        if (enemyCapHero.location == nextLocation):
+                            attackEnemyArray[2] = [True, nextLocation]
+                            rangeUsed = range
+                            break
+                rangeUsed += 1
+
+    return(attackEnemyArray)
+    print(attackEnemyArray)                
+
+                
 
 
 def updateState():
@@ -268,6 +713,8 @@ getStatsButton.grid(row=9, column=2)
 getMoveButton = Button(window, text="Get Move", bg="gray", command=getMove)
 getMoveButton.grid(row=10, column=2)
 
+alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
 whatTheFuckThisThingIsHuge = {'A1': ['B1', 'A2', 'B2'], 'B1': ['A1', 'C1', 'A2', 'B2', 'C2'],
                               'C1': ['B1', 'D1', 'B2', 'C2', 'D2'], 'D1': ['C1', 'E1', 'C2', 'D2', 'E2'],
                               'E1': ['D1', 'F1', 'D2', 'E2', 'F2'], 'F1': ['E1', 'G1', 'E2', 'F2', 'G2'],
@@ -338,9 +785,9 @@ whatTheFuckThisThingIsHuge = {'A1': ['B1', 'A2', 'B2'], 'B1': ['A1', 'C1', 'A2',
                               'A7': ['A6', 'B6', 'B7', 'B8', 'A8'], 'B7': ['A6', 'B6', 'B8', 'A8', 'A7'],
                               'C7': ['C6', 'D6', 'D7'], 'D7': ['C6', 'D6', 'E6', 'E7', 'E8', 'C7'],
                               'E7': ['D6', 'E6', 'F6', 'F7', 'F8', 'E8', 'D8', 'D7'],
-                              'F7': ['E6', 'F6', 'F8', 'E8', 'E7'], 'G7': ['G6', 'H6', 'H7', 'H8', 'G8'],
-                              'H7': ['G6', 'I7', 'I8', 'H8', 'G8', 'G7'], 'I7': ['J7', 'J8', 'I8', 'H8', 'H7'],
-                              'J7': ['J8', 'I8', 'I7'], 'K7': ['L7', 'L8', 'K8'],
+                              'F7': ['E6', 'F6', 'F8', 'E8', 'E7'], 'G7': ['G6', 'H6', 'H7',  'G8'],
+                              'H7': ['G6', 'I7',  'G8', 'G7'], 'I7': ['J7', 'J8',  'H7'],
+                              'J7': ['J8', 'I7'], 'K7': ['L7', 'L8', 'K8'],
                               'L7': ['M6', 'M7', 'M8', 'L8', 'K8', 'K7'],
                               'M7': ['L6', 'M6', 'N6', 'N7', 'N8', 'M8', 'L8', 'L7'],
                               'N7': ['M6', 'N6', 'O7', 'O8', 'N8', 'M8', 'M7'],
@@ -349,10 +796,8 @@ whatTheFuckThisThingIsHuge = {'A1': ['B1', 'A2', 'B2'], 'B1': ['A1', 'C1', 'A2',
                               'C8': ['D8', 'D9', 'C9'], 'D8': ['E7', 'E8', 'E9', 'D9', 'C9', 'C8'],
                               'E8': ['D7', 'E7', 'F7', 'F8', 'F9', 'E9', 'D9', 'D8'],
                               'F8': ['E7', 'F7', 'G9', 'F9', 'E9', 'E8'],
-                              'G8': ['G7', 'H7', 'H8', 'H9', 'G9', 'F9'],
-                              'H8': ['G7', 'H7', 'I7', 'I8', 'I9', 'H9', 'G9', 'G8'],
-                              'I8': ['H7', 'I7', 'J7', 'J8', 'J9', 'I9', 'H9', 'H8'],
-                              'J8': ['I7', 'J7', 'J9', 'I9', 'I8'], 'K8': ['K7', 'L7', 'L8', 'L9', 'K9'],
+                              'G8': ['G7', 'H7',   'G9', 'F9'],
+                              'J8': ['I7', 'J7', 'J9'], 'K8': ['K7', 'L7', 'L8', 'L9', 'K9'],
                               'L8': ['K7', 'L7', 'M7', 'M8', 'M9', 'L9', 'K9', 'K8'],
                               'M8': ['L7', 'M7', 'N7', 'N8', 'L9', 'L8'],
                               'N8': ['M7', 'N7', 'O7', 'O8', 'M8'], 'O8': ['N7', 'O7', 'P7', 'P8', 'N8'],
@@ -360,10 +805,8 @@ whatTheFuckThisThingIsHuge = {'A1': ['B1', 'A2', 'B2'], 'B1': ['A1', 'C1', 'A2',
                               'C9': ['B8', 'C8', 'D8', 'D9', 'B9'], 'D9': ['C8', 'D8', 'E8', 'E9', 'E10', 'C9'],
                               'E9': ['D8', 'E8', 'F8', 'F9', 'F10', 'E10', 'D10', 'D9'],
                               'F9': ['E8', 'F8', 'G8', 'G9', 'G10', 'F10', 'E10', 'E9'],
-                              'G9': ['F8', 'G8', 'H8', 'H9', 'H10', 'G10', 'F10', 'F9'],
-                              'H9': ['G8', 'H8', 'I8', 'I9', 'I10', 'H10', 'G10', 'G9'],
-                              'I9': ['H8', 'I8', 'J8', 'J9', 'J10', 'I10', 'H10', 'H9'],
-                              'J9': ['I8', 'J8', 'K10', 'J10', 'I10', 'I9'], 'K9': ['K8', 'L8', 'L9', 'L10', 'K10'],
+                              'G9': ['F8', 'G8',   'H10', 'G10', 'F10', 'F9'],
+                              'J9': ['J8', 'K10', 'J10', 'I10'], 'K9': ['K8', 'L8', 'L9', 'L10', 'K10'],
                               'L9': ['K8', 'L8', 'M8', 'M9', 'M10', 'L10', 'K10', 'K9'],
                               'M9': ['L8', 'N9', 'N10', 'M10', 'L10', 'L9'], 'N9': ['O9', 'O10', 'N10', 'M10', 'M9'],
                               'O9': ['P9', 'P10', 'O10', 'N10', 'N9'], 'P9': ['P10', 'O10', 'O9'],
@@ -371,9 +814,9 @@ whatTheFuckThisThingIsHuge = {'A1': ['B1', 'A2', 'B2'], 'B1': ['A1', 'C1', 'A2',
                               'D10': ['E9', 'E10', 'E11', 'D11', 'C11', 'C10'],
                               'E10': ['D9', 'E9', 'F9', 'F10', 'F11', 'E11', 'D11', 'D10'],
                               'F10': ['E9', 'F9', 'G9', 'F11', 'E11', 'E10'],
-                              'G10': ['F9', 'G9', 'H9', 'H10'], 'H10': ['G9', 'H9', 'I9', 'I10', 'I11', 'G10'],
-                              'I10': ['H9', 'I9', 'J9', 'J10', 'J11', 'I11', 'H11', 'H10'],
-                              'J10': ['I9', 'J9', 'K9', 'K10', 'I11', 'I10'],
+                              'G10': ['F9', 'G9',  'H10'], 'H10': ['G9',  'I10', 'I11', 'G10'],
+                              'I10': [ 'J9', 'J10', 'J11', 'I11', 'H11', 'H10'],
+                              'J10': ['J9', 'K9', 'K10', 'I11', 'I10'],
                               'K10': ['J9', 'K9', 'L9', 'L10', 'J10'], 'L10': ['K9', 'L9', 'M9', 'M10', 'K10'],
                               'M10': ['L9', 'M9', 'N9', 'N10', 'N11', 'M11', 'L11', 'L10'],
                               'N10': ['M9', 'N9', 'O9', 'O10', 'N11', 'M11', 'M10'],
@@ -425,4 +868,11 @@ whatTheFuckThisThingIsHuge = {'A1': ['B1', 'A2', 'B2'], 'B1': ['A1', 'C1', 'A2',
                               'L16': ['L15', 'M16'], 'M16': ['L16', 'M15', 'N16'], 'N16': ['M16', 'N15', 'O16'],
                               'O16': ['N16', 'O15', 'P16'], 'P16': ['O16', 'P15']}
 
+waterArray = ['E1', 'F1', 'G1', 'J1', 'K1', 'L1', 'G2', 'J2', 'G3', 'H3', 'I3', 'J3', 'H4', 'I4', 'H5', 'I5', 'H6',
+             'G7', 'H7', 'I7', 'E8', 'G8', 'J8', 'E9', 'F9', 'G9', 'J9', 'D10', 'E10', 'H10', 'I10', 'J10', 'D11', 'I11',
+             'D12', 'J12', 'J13', 'J14', 'K14', 'L14', 'L15']
+enemyThorHero.location = 'E8'
+enemyIronMan.location = 'G10'
+enemyCapHero.location = 'E10'
+lineOfSight('F9', myIronManHero.range)
 window.mainloop()
